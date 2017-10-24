@@ -7,19 +7,26 @@
 //
 
 import UIKit
+import GooglePlaces
 
 class PageVC: UIPageViewController {
 
+    
     var pageControl: UIPageControl!
     var barButtonWidth: CGFloat = 44
     var barButtonHeight: CGFloat = 44
+    
     var currentPage = 0
-    var locationsArray = ["Local City", "Sydney, Australia", "Accra, Ghana", "Uglich, Russia"]
+    var locationsArray = [WeatherLocation]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
         dataSource = self
+        
+        var newLocation = WeatherLocation()
+        newLocation.name = ""
+        locationsArray.append(newLocation)
         
         setViewControllers([createDetailVC(forPage: 0)], direction: .forward, animated: false, completion: nil)
     }
@@ -72,6 +79,9 @@ class PageVC: UIPageViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let currentViewController = self.viewControllers?[0] as? DetailVC else {return}
+        locationsArray = currentViewController.locationsArray
+        
         if segue.identifier == "ToListVC" {
             let destination = segue.destination as! ListVC
             destination.locationsArray = locationsArray
