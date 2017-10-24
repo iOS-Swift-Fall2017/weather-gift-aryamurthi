@@ -25,7 +25,9 @@ class DetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if currentPage != 0 {
-            updateUserInterface()
+            self.locationsArray[currentPage].getWeather {
+                self.updateUserInterface()
+            }
         }
     }
     
@@ -88,8 +90,9 @@ extension DetailVC: CLLocationManagerDelegate {
             }
             self.locationsArray[0].name = place
             self.locationsArray[0].coordinates = currentCoordinates
-            self.locationsArray[0].getWeather()
-            self.updateUserInterface()
+            self.locationsArray[0].getWeather {
+                self.updateUserInterface()
+            }
         })
     }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

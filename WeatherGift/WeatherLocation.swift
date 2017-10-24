@@ -15,7 +15,7 @@ struct WeatherLocation {
     var coordinates = ""
     var currentTemp = "--"
     
-    mutating func getWeather() {
+    mutating func getWeather(completed: @escaping () ->()) {
         let weatherURL = urlBase + urlAPIKey + coordinates
         print(weatherURL)
         
@@ -24,7 +24,6 @@ struct WeatherLocation {
             case .success(let value):
                 let json = JSON(value)
                 if let temperature = json["currently"]["temperature"].double {
-                    print("***** tempt inside getWeather = \(temperature)")
                     let roundedTemp = String(format:"%3.f",temperature)
                     self.currentTemp = roundedTemp + "°"
                 } else {
@@ -33,7 +32,7 @@ struct WeatherLocation {
             case .failure(let error):
                 print(error)
             }
-            
+            completed()
         }
     }
 }
