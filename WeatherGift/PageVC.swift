@@ -10,7 +10,6 @@ import UIKit
 import GooglePlaces
 
 class PageVC: UIPageViewController {
-
     
     var pageControl: UIPageControl!
     var barButtonWidth: CGFloat = 44
@@ -24,7 +23,7 @@ class PageVC: UIPageViewController {
         delegate = self
         dataSource = self
         
-        var newLocation = WeatherLocation()
+        let newLocation = WeatherLocation()
         newLocation.name = ""
         locationsArray.append(newLocation)
         

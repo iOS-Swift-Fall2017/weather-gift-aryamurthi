@@ -10,12 +10,26 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-struct WeatherLocation {
+class WeatherLocation {
+    
+    struct DailyForecast {
+        var dailyMaxTemp: Double
+        var dailyMinTemp: Double
+        var dailysummary: String
+        var dailyDate: Double
+        var dailyIcon: String
+    }
+    
     var name = ""
     var coordinates = ""
     var currentTemp = "--"
+    var currentSummary = ""
+    var currentIcon = ""
+    var timeZone = ""
+    var currentTime: Double = 0
+    var dailyForecastArray = [DailyForecast]()
     
-    mutating func getWeather(completed: @escaping () ->()) {
+    func getWeather(completed: @escaping () ->()) {
         let weatherURL = urlBase + urlAPIKey + coordinates
         print(weatherURL)
         
@@ -29,6 +43,39 @@ struct WeatherLocation {
                 } else {
                     print("Could not return a temperature")
                 }
+                if let summary = json["daily"]["summary"].string {
+                    self.currentSummary = summary
+                } else {
+                    print("could not return a summary")
+                }
+                if let icon = json["currently"]["icon"].string {
+                    self.currentIcon = icon
+                } else {
+                    print("could not return an icon")
+                }
+                if let timeZone = json["timezone"].string {
+                    self.timeZone = timeZone
+                } else {
+                    print("could not return a time")
+                }
+                if let time = json["currently"]["time"].double {
+                    self.currentTime = time
+                } else {
+                    print("could not return a time")
+                }
+                let dailyDataArray = json["daily"]["data"]
+                self.dailyForecastArray = []
+                for day in 1...dailyDataArray.count-1 {
+                    let maxTemp = json["daily"]["data"][day]["temperatureHigh"].doubleValue
+                    let minTemp = json["daily"]["data"][day]["temperatureLow"].doubleValue
+                    let dateValue = json["daily"]["data"][day]["time"].doubleValue
+                    let icon = json["daily"]["data"][day]["icon"].stringValue
+                    let dailySummary = json["daily"]["data"][day]["summary"].stringValue
+                    let newDailyForecast = DailyForecast(dailyMaxTemp: maxTemp, dailyMinTemp: minTemp, dailysummary: dailySummary, dailyDate: dateValue, dailyIcon: icon)
+                    
+                    self.dailyForecastArray.append(newDailyForecast)
+                }
+                
             case .failure(let error):
                 print(error)
             }
