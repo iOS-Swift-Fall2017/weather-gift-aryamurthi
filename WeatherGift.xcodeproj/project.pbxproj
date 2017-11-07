@@ -8,10 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		7057CEEC1F900315004EA6F8 /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7057CEEB1F900315004EA6F8 /* ListVC.swift */; };
+		70592A7B1FAD4520008D3329 /* HourlyWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70592A7A1FAD4520008D3329 /* HourlyWeatherCell.swift */; };
+		70592A7F1FAE3DD4008D3329 /* WeatherLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70592A7E1FAE3DD4008D3329 /* WeatherLocation.swift */; };
+		70592A811FAE5F36008D3329 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70592A801FAE5F36008D3329 /* AboutVC.swift */; };
 		70972D881F900675009962B6 /* PageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70972D871F900675009962B6 /* PageVC.swift */; };
-		70A1BA951F9FB622007CD25B /* WeatherLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1BA941F9FB622007CD25B /* WeatherLocation.swift */; };
+		70A1BA951F9FB622007CD25B /* WeatherDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1BA941F9FB622007CD25B /* WeatherDetail.swift */; };
 		70A1BA971F9FD0CE007CD25B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1BA961F9FD0CE007CD25B /* Constants.swift */; };
 		70A1BA991FA6A06A007CD25B /* DayWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A1BA981FA6A06A007CD25B /* DayWeatherCell.swift */; };
+		70B2814E1FABEEA700AF185C /* TimeInterval+format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B2814D1FABEEA700AF185C /* TimeInterval+format.swift */; };
 		70EE4F9F1F8FF825007FFB74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EE4F9E1F8FF825007FFB74 /* AppDelegate.swift */; };
 		70EE4FA41F8FF825007FFB74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70EE4FA21F8FF825007FFB74 /* Main.storyboard */; };
 		70EE4FA61F8FF825007FFB74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 70EE4FA51F8FF825007FFB74 /* Assets.xcassets */; };
@@ -22,10 +26,14 @@
 
 /* Begin PBXFileReference section */
 		7057CEEB1F900315004EA6F8 /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
+		70592A7A1FAD4520008D3329 /* HourlyWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeatherCell.swift; sourceTree = "<group>"; };
+		70592A7E1FAE3DD4008D3329 /* WeatherLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLocation.swift; sourceTree = "<group>"; };
+		70592A801FAE5F36008D3329 /* AboutVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
 		70972D871F900675009962B6 /* PageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageVC.swift; sourceTree = "<group>"; };
-		70A1BA941F9FB622007CD25B /* WeatherLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLocation.swift; sourceTree = "<group>"; };
+		70A1BA941F9FB622007CD25B /* WeatherDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetail.swift; sourceTree = "<group>"; };
 		70A1BA961F9FD0CE007CD25B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		70A1BA981FA6A06A007CD25B /* DayWeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayWeatherCell.swift; sourceTree = "<group>"; };
+		70B2814D1FABEEA700AF185C /* TimeInterval+format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+format.swift"; sourceTree = "<group>"; };
 		70EE4F9B1F8FF825007FFB74 /* WeatherGift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherGift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		70EE4F9E1F8FF825007FFB74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		70EE4FA31F8FF825007FFB74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -81,13 +89,17 @@
 			isa = PBXGroup;
 			children = (
 				70EE4F9E1F8FF825007FFB74 /* AppDelegate.swift */,
+				70592A7E1FAE3DD4008D3329 /* WeatherLocation.swift */,
+				70A1BA941F9FB622007CD25B /* WeatherDetail.swift */,
+				70592A801FAE5F36008D3329 /* AboutVC.swift */,
 				70972D871F900675009962B6 /* PageVC.swift */,
-				70A1BA961F9FD0CE007CD25B /* Constants.swift */,
-				70A1BA941F9FB622007CD25B /* WeatherLocation.swift */,
-				70EE4FB01F8FF884007FFB74 /* DetailVC.swift */,
 				7057CEEB1F900315004EA6F8 /* ListVC.swift */,
-				70EE4FA21F8FF825007FFB74 /* Main.storyboard */,
+				70EE4FB01F8FF884007FFB74 /* DetailVC.swift */,
+				70B2814D1FABEEA700AF185C /* TimeInterval+format.swift */,
+				70A1BA961F9FD0CE007CD25B /* Constants.swift */,
 				70A1BA981FA6A06A007CD25B /* DayWeatherCell.swift */,
+				70592A7A1FAD4520008D3329 /* HourlyWeatherCell.swift */,
+				70EE4FA21F8FF825007FFB74 /* Main.storyboard */,
 				70EE4FA51F8FF825007FFB74 /* Assets.xcassets */,
 				70EE4FA71F8FF825007FFB74 /* LaunchScreen.storyboard */,
 				70EE4FAA1F8FF825007FFB74 /* Info.plist */,
@@ -238,11 +250,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				70A1BA991FA6A06A007CD25B /* DayWeatherCell.swift in Sources */,
-				70A1BA951F9FB622007CD25B /* WeatherLocation.swift in Sources */,
+				70592A7B1FAD4520008D3329 /* HourlyWeatherCell.swift in Sources */,
+				70A1BA951F9FB622007CD25B /* WeatherDetail.swift in Sources */,
 				7057CEEC1F900315004EA6F8 /* ListVC.swift in Sources */,
 				70972D881F900675009962B6 /* PageVC.swift in Sources */,
+				70592A7F1FAE3DD4008D3329 /* WeatherLocation.swift in Sources */,
+				70B2814E1FABEEA700AF185C /* TimeInterval+format.swift in Sources */,
 				70EE4F9F1F8FF825007FFB74 /* AppDelegate.swift in Sources */,
 				70EE4FB11F8FF884007FFB74 /* DetailVC.swift in Sources */,
+				70592A811FAE5F36008D3329 /* AboutVC.swift in Sources */,
 				70A1BA971F9FD0CE007CD25B /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

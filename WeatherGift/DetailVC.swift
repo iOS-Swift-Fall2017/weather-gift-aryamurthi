@@ -8,7 +8,13 @@
 
 import UIKit
 import CoreLocation
-
+private let dateFormatter: DateFormatter = {
+    
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "EEEE, MMM, dd, y"
+    return dateFormatter
+    
+}()
 class DetailVC: UIViewController {
     
     @IBOutlet weak var dateLabel: UILabel!
@@ -17,9 +23,11 @@ class DetailVC: UIViewController {
     @IBOutlet weak var summaryLabel: UILabel!
     @IBOutlet weak var currentImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     var currentPage = 0
     var locationsArray = [WeatherLocation]()
+    var locationDetail: WeatherDetail!
     var locationManager: CLLocationManager!
     var currentLocation: CLLocation!
     
@@ -28,13 +36,15 @@ class DetailVC: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        locationDetail = WeatherDetail(name: locationsArray[currentPage].name, coordinates: locationsArray[currentPage].coordinates)
         if currentPage != 0 {
-            self.locationsArray[currentPage].getWeather {
+            self.locationDetail.getWeather {
                 self.updateUserInterface()
             }
         }
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if currentPage == 0 {
@@ -43,31 +53,23 @@ class DetailVC: UIViewController {
     }
     
     func updateUserInterface() {
-        let location = locationsArray[currentPage]
-        
-        locationLabel.text = location.name
-        summaryLabel.text = location.currentSummary
-        
-        dateLabel.text = updateDateLabel(location: location)
-        
-        temperatureLabel.text = location.currentTemp
-        currentImage.image = UIImage(named:"\(location.currentIcon)")
+        locationLabel.text = locationDetail.name
+        summaryLabel.text = locationDetail.currentSummary
+        dateLabel.text = locationDetail.currentTime.format(timeZone: locationDetail.timeZone, dateFormatter: dateFormatter)
+        temperatureLabel.text = locationDetail.currentTemp
+        currentImage.image = UIImage(named:"\(locationDetail.currentIcon)")
         tableView.reloadData()
-        
-        
+        collectionView.reloadData()
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(alertAction)
+        present(alertController, animated: true, completion: nil)
     }
 }
 
-func updateDateLabel(location: WeatherLocation) -> String {
-    
-    let unixdate: TimeInterval = location.currentTime
-    let date = Date(timeIntervalSince1970: unixdate)
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "EEEE, MMM dd, y"
-    dateFormatter.timeZone = TimeZone(identifier:location.timeZone)
-    let dateString = dateFormatter.string(from: date)
-    return dateString
-}
 extension DetailVC: CLLocationManagerDelegate {
     
     func getLocation(){
@@ -83,10 +85,26 @@ extension DetailVC: CLLocationManagerDelegate {
         case .authorizedAlways, .authorizedWhenInUse:
             locationManager.requestLocation()
         case .denied:
-            print("Alert user- we'll do this later")
+            showAlertToPrivacySettings(title: "User has not authorized location services.", message: "Select 'Settings' below to open device settings and change locations services.")
         case .restricted:
-            print("Alert user- we'll do this later")
+            showAlert(title: "Location services denied.", message: "It may be that parental controls are restricting location use in this app.")
         }
+    }
+    
+    func showAlertToPrivacySettings(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        guard let settingsURL = URL(string: UIApplicationOpenSettingsURLString) else {
+            print("Something went wrong getting the URLString for Settings")
+            return
+        }
+        let settingsAction = UIAlertAction(title: "Settings", style: .default) {
+            value in UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+        }
+        
+        let cancelAction = UIAlertAction(title:"Cancel", style: .cancel, handler: nil)
+        alertController.addAction(settingsAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -113,7 +131,8 @@ extension DetailVC: CLLocationManagerDelegate {
             }
             self.locationsArray[0].name = place
             self.locationsArray[0].coordinates = currentCoordinates
-            self.locationsArray[0].getWeather {
+            self.locationDetail = WeatherDetail(name: place, coordinates: currentCoordinates)
+            self.locationDetail.getWeather {
                 self.updateUserInterface()
             }
         })
@@ -125,13 +144,13 @@ extension DetailVC: CLLocationManagerDelegate {
 extension DetailVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locationsArray[currentPage].dailyForecastArray.count
+        return locationDetail.dailyForecastArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "dayWeatherCell", for: indexPath) as! DayWeatherCell
-        let dailyForecast = locationsArray[currentPage].dailyForecastArray[indexPath.row]
-        let timeZone = locationsArray[currentPage].timeZone
+        let dailyForecast = locationDetail.dailyForecastArray[indexPath.row]
+        let timeZone = locationDetail.timeZone
         cell.update(with: dailyForecast, timeZone: timeZone )
         return cell
     }
@@ -139,6 +158,17 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
+}
+extension DetailVC: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let hourlyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCell", for: indexPath) as! HourlyWeatherCell
+        let hourlyForecast = locationDetail.hourlyForecastArray[indexPath.row]
+        let timeZone = locationDetail.timeZone
+        hourlyCell.update(with: hourlyForecast, timeZone: timeZone)
+        return hourlyCell
+    }
     
-   
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return locationDetail.hourlyForecastArray.count
+    }
 }
